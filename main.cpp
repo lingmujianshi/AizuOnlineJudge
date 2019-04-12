@@ -1,133 +1,92 @@
-//ALDS1_3_B Queue - Elementary data structures - Stack
+//ALDS1_3_C Elementary data structures - Doubly Linked List
 #include <iostream>
 #include <string>
 using namespace std;
 
-class Queue
+class Array
 {
-  private:
-    static const int MAX = 100005;
+private:
+    static const int MAX = 11;
 
-  public:
-    Queue()
-    {
-        inisialize();
-    }
+public:
+    Array(){}
 
 private:
-    int Q[MAX]{};
-public:
-    int head, tail;
+    int A[MAX]={};
+    int top=0;
 
-  private:
-    void inisialize()
+private:
+    bool isEmpty()
     {
-        head = tail = 0;
+        return top-1 == 0;
     }
 
     bool isFull()
     {
-        return head == (tail+1) % MAX;
+        return top >= MAX - 1;
     }
 
-  public:
-    bool isEmpty()
+public:
+    void insert(int ptr, int val)
     {
-        return head == tail;
+        if(isFull())
+        {
+            throw runtime_error("Array is full");
+        }
+        for (int i = top; i > ptr; i--)
+        {
+            A[i+1] = A[i];
+        }
+        top++;
+        A[ptr] = val;
     }
 
-    void enqueue(int x)
-    {
-        if (isFull())
-        {
-            //error
-            throw runtime_error("Overflow");
-        }
-        Q[tail] = x;
-        if ((tail + 1) == MAX)
-        {
-            tail = 0;
-        }
-        else
-        {
-            tail++;
-        }
-    }
-
-    int dequeue()
+    int picup(int ptr)
     {
         if (isEmpty())
         {
-            //error
-            throw runtime_error("Underflow");
+            throw runtime_error("Array is empty");
         }
-        int x = Q[head];
-        Q[head]=0;
-        if ((head + 1) == MAX)
+        int result = A[ptr];
+        for (int i = ptr; i < top; i++)
         {
-            head = 0;
+            A[i] = A[i+1];
         }
-        else
-        {
-            head++;
-        }
-        return x;
+        A[top]=0;
+        top--;
+
+        return result;
     }
 
-    int num()
+    void dump()
     {
-        int res;
-        if (tail >= head) {
-            res = tail - head;
-        } else {
-            res = tail + MAX - head +1;
+        for (int i=0; i<=top; i++ ) {
+            cout << A[i] << " ";
         }
-        return res;
+        cout << endl;
     }
 
-    void print()
-    {
-        cout << "頭" << head << " 尾" << tail << " 空" << (int)isEmpty() << " 満" << (int)isFull()<<" 数"<< num() << " Q[";
-
-        for (int i = 0; i < MAX; i++)
-        {
-            cout << Q[i] << " ";
-        }
-        cout << "]" << endl;
-    }
 };
 
 int main()
 {
-    string s[100005];
-    int t[100005];
-    int num,time;
-    Queue q;
-
-    cin >> num >> time;
-
-    for(int i = 0; i < num; i++)
+    size_t num;
+    //cin >> num;
+    num = 2;
+    Array a;
+    string buf,s[10];
+    for (size_t i = 0; i < num; i++)
     {
-        cin >> s[i] >> t[i];
-        q.enqueue(i);
-    }
-
-    int id;
-    int totalTime = 0;
-    while(!q.isEmpty())
-    {
-        id =q.dequeue();
-        if(t[id]<=time) {
-            cout << s[id]  << " " << totalTime + t[id] << endl;
-            totalTime = totalTime + t[id];
-        }
-        else
+        int j = 0;
+        while(getline(cin,buf,' '))
         {
-            t[id] -= time;
-            q.enqueue(id);
-            totalTime += time;
+            s[j]=buf;
+            j++;
         }
 
+        
     }
+    
+
     return 0;
 }
