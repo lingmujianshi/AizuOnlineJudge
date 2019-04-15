@@ -1,4 +1,5 @@
 //ALDS1_3_C Elementary data structures - Doubly Linked List
+#include<cstdio>
 #include <iostream>
 #include <string>
 using namespace std;
@@ -6,19 +7,26 @@ using namespace std;
 class Array
 {
 private:
-    static const int MAX = 11;
+    static const unsigned int MAX = 2000000001;
+    int* A;
+    unsigned int top;
 
 public:
-    Array(){}
-
-private:
-    int A[MAX]={};
-    int top=0;
+    Array()
+    {
+        top = 0ul;
+        A = new int[MAX]; 
+    }
+    ~Array()
+    {
+        A = nullptr;
+        delete[] A; 
+    }
 
 private:
     bool isEmpty()
     {
-        return top-1 == 0;
+        return top-1 < 0;
     }
 
     bool isFull()
@@ -27,28 +35,29 @@ private:
     }
 
 public:
-    void insert(int ptr, int val)
+    void insert(unsigned int ptr, int val)
     {
         if(isFull())
         {
             throw runtime_error("Array is full");
         }
-        for (int i = top; i > ptr; i--)
+        for (unsigned int i = top; i >= ptr; i--)
         {
             A[i+1] = A[i];
+            if(i==0) break;
         }
         top++;
         A[ptr] = val;
     }
 
-    int picup(int ptr)
+    int picup(unsigned int ptr)
     {
         if (isEmpty())
         {
             throw runtime_error("Array is empty");
         }
         int result = A[ptr];
-        for (int i = ptr; i < top; i++)
+        for (unsigned int i = ptr; i < top; i++)
         {
             A[i] = A[i+1];
         }
@@ -58,10 +67,28 @@ public:
         return result;
     }
 
+    void del(unsigned int key)
+    {
+        for (unsigned int i = 0; i < top; i++)
+        {
+            if (A[i]==key)
+            {
+                picup(i);
+                break;
+            }
+        }
+    }
+
+    unsigned int getLast()
+    {
+        return top;
+    }
+
     void dump()
     {
-        for (int i=0; i<=top; i++ ) {
-            cout << A[i] << " ";
+        for (unsigned int i=0; i<top; i++ ) {
+            cout << A[i];
+            if(i<top-1) cout << " ";
         }
         cout << endl;
     }
@@ -70,23 +97,38 @@ public:
 
 int main()
 {
-    size_t num;
-    //cin >> num;
-    num = 2;
+    unsigned int num;
+    scanf("%d",&num);
     Array a;
     string buf,s[10];
-    for (size_t i = 0; i < num; i++)
+    string syntax;
+    unsigned int op;
+    for (unsigned int i = 0; i < num; i++)
     {
-        int j = 0;
-        while(getline(cin,buf,' '))
+        cin >> syntax;
+        if (syntax == "insert")
         {
-            s[j]=buf;
-            j++;
+            scanf("%d",&op);
+            a.insert(0,op);
         }
-
-        
+        else if (syntax == "delete")
+        {
+            scanf("%d",&op);
+            a.del(op);
+        }
+        else if (syntax == "deleteFirst")
+        {
+            a.picup(0);
+        }
+        else if (syntax == "deleteLast")
+        {
+            a.picup(a.getLast());
+        }
+        else
+        {
+            cout << "none" << endl;
+        }     
     }
-    
-
+    a.dump();
     return 0;
 }
