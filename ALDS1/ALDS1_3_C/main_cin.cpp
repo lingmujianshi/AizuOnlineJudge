@@ -1,6 +1,7 @@
 //ALDS1_3_C Elementary data structures - Doubly Linked List
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 class DoublyLinkedList
 {
     struct Node
@@ -100,10 +101,12 @@ int main()
     char com[20];
     int np = 0, nd = 0;
     DoublyLinkedList dll;
-    scanf("%d", &n);
+    //scanf("%d", &n);
+    std::cin >> n;
     for (i = 0; i < n; i++)
     {
-        scanf("%s%d", com, &key);
+        //scanf("%s%d", com, &key);
+        std::cin >> com >> key;
         if (com[0] == 'i')
         {
             dll.insert(key);
